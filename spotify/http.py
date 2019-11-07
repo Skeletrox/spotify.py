@@ -1578,7 +1578,7 @@ class HTTPClient:
         route = self.route("GET", "/audio-features")
         return self.request(route, params={"ids": track_ids})
 
-    def track(self, track_id: str, market: Optional[str] = None) -> Awaitable:
+    def track(self, track_id: str, market: Optional[str] = "US") -> Awaitable:
         """Get Spotify catalog information for a single track identified by its unique Spotify ID.
 
         Parameters
@@ -1590,13 +1590,11 @@ class HTTPClient:
             Provide this parameter if you want to apply Track Relinking.
         """
         route = self.route("GET", "/tracks/{id}", id=track_id)
-
-        if market is not None:
-            payload: Dict[str, Any] = {"market": market}
+        payload: Dict[str, Any] = {"market": market}
 
         return self.request(route, params=payload)
 
-    def tracks(self, track_ids: List[str], market: Optional[str] = None) -> Awaitable:
+    def tracks(self, track_ids: List[str], market: Optional[str] = "US") -> Awaitable:
         """Get Spotify catalog information for multiple tracks based on their Spotify IDs.
 
         Parameters
@@ -1609,9 +1607,7 @@ class HTTPClient:
         """
         route = self.route("GET", "/tracks")
         payload: Dict[str, Any] = {"ids": track_ids}
-
-        if market is not None:
-            payload["market"] = market
+        payload["market"] = market
 
         return self.request(route, params=payload)
 
@@ -1697,6 +1693,7 @@ class HTTPClient:
             payload["include_external"] = include_external
 
         return self.request(route, params=payload)
+
 
 
 class HTTPUserClient(HTTPClient):
